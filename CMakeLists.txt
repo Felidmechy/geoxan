@@ -6,11 +6,21 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/thirdparty/SFML-2.5.1)
+add_subdirectory(${CMAKE_SOURCE_DIR}/thirdparty/raudio)
 
-add_executable(geoxan ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+
+add_executable(geoxan 
+${CMAKE_SOURCE_DIR}/src/main.cpp
+${CMAKE_SOURCE_DIR}/src/app.cpp
+${CMAKE_SOURCE_DIR}/src/basestate.cpp
+${CMAKE_SOURCE_DIR}/src/titlestate.cpp)
+
+
 
 target_include_directories(geoxan PRIVATE ${CMAKE_SOURCE_DIR}/inc)
 
+target_link_libraries(geoxan raudio)
 target_link_libraries(geoxan sfml-system)
 target_link_libraries(geoxan sfml-window)
 target_link_libraries(geoxan sfml-graphics)
@@ -24,9 +34,9 @@ set_target_properties(geoxan PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/game
 )
 
-add_custom_command(TARGET geoxan POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1 ${CMAKE_SOURCE_DIR}/game)
+#add_custom_command(TARGET geoxan POST_BUILD
+#                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                       ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1 ${CMAKE_SOURCE_DIR}/game)
 
 
 
