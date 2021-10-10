@@ -1,6 +1,7 @@
 #include "titlestate.h"
 #include "app.h"
 #include "SFML/Graphics.hpp"
+#include <string>
 
 TitleState::TitleState() : IBaseState("TitleState")
 {
@@ -21,7 +22,11 @@ void TitleState::draw(int deltams)
     window->clear();
 
     sf::Text text;
-    text.setString("text");
+
+    sf::String number(std::to_string(deltams));
+
+    text.setString(number);
+
     text.setFont(font);
     text.setPosition(sf::Mouse::getPosition(*window).x,sf::Mouse::getPosition(*window).y);
     text.setCharacterSize(24);
@@ -43,5 +48,11 @@ void TitleState::release(IBaseState* nextstate)
 
 void TitleState::event(sf::Event &event)
 {
-
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Key::Escape)
+        {
+            window->close();
+        }
+    }
 }

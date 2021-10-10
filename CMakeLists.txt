@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/thirdparty/SFML-2.5.1)
 add_subdirectory(${CMAKE_SOURCE_DIR}/thirdparty/raudio)
+add_subdirectory(${CMAKE_SOURCE_DIR}/thirdparty/speedykv)
 
 
 
@@ -20,6 +21,7 @@ ${CMAKE_SOURCE_DIR}/src/titlestate.cpp)
 
 target_include_directories(geoxan PRIVATE ${CMAKE_SOURCE_DIR}/inc)
 
+target_link_libraries(geoxan speedykv)
 target_link_libraries(geoxan raudio)
 target_link_libraries(geoxan sfml-system)
 target_link_libraries(geoxan sfml-window)
