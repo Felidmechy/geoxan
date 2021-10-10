@@ -27,7 +27,7 @@ void geoxan::changestate(IBaseState* newstate)
 void geoxan::update()
 {
     deltams = frametimer.restart().asMilliseconds();
-    gamems = gametimer.getElapsedTime().asMilliseconds();
+    gamems = gametimer.getElapsedTime().asMicroseconds() / 1000;
 
     state->update(deltams);
     state->draw(deltams);

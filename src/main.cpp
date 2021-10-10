@@ -27,15 +27,15 @@ int main()
     }
     if (settingskv["VideoSettings"]["WindowXSize"].IsValid())
     {
-        fullscreen = atoi(settingskv["VideoSettings"]["WindowXSize"].value.string);
+        xsize = atoi(settingskv["VideoSettings"]["WindowXSize"].value.string);
     }
     if (settingskv["VideoSettings"]["WindowYSize"].IsValid())
     {
-        fullscreen = atoi(settingskv["VideoSettings"]["WindowYSize"].value.string);
+        ysize = atoi(settingskv["VideoSettings"]["WindowYSize"].value.string);
     }
     if (settingskv["VideoSettings"]["MaxFPS"].IsValid())
     {
-        fullscreen = atoi(settingskv["VideoSettings"]["MaxFPS"].value.string);
+        maxfps = atoi(settingskv["VideoSettings"]["MaxFPS"].value.string);
     }
 
 
@@ -67,6 +67,9 @@ int main()
     SetMasterVolume(volume);
 
     geoxan *game = new geoxan(&window);
+    //hack to update before first state
+    game->deltams = game->frametimer.restart().asMilliseconds();
+    game->gamems = game->gametimer.getElapsedTime().asMicroseconds() / 1000;
     game->changestate(new TitleState);
 
 

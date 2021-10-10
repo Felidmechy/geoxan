@@ -13,7 +13,7 @@ public:
     sf::Clock gametimer;
     sf::Clock frametimer;
     int deltams;
-    int gamems;
+    long gamems;
 
     void changestate(IBaseState* newstate);
     void update();
