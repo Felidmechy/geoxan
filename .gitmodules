@@ -1,3 +1,0 @@
-[submodule "thirdparty/raudio"]
-	path = thirdparty/raudio
-	url = https://github.com/raysan5/raudio
