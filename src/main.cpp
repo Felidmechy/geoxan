@@ -3,6 +3,7 @@
 #include "app.h"
 #include "icon.h"
 #include "titlestate.h"
+#include "gamestate.h"
 
 int main()
 {
@@ -19,22 +20,24 @@ int main()
     }
     else
     {
-        window.create(sf::VideoMode(settings.xsize, settings.ysize), "geoxan");
+        window.create(sf::VideoMode(settings.xsize, settings.ysize), "geoxan", sf::Style::Titlebar | sf::Style::Close);
     }
 
     window.setActive(true);
     window.setFramerateLimit(settings.maxfps);
 
-    window.setIcon(96, 87, (unsigned char*)icon);
+    //window.setIcon(96, 87, (unsigned char*)icon);
 
     InitAudioDevice();
     SetMasterVolume(settings.volume);
 
     geoxan *game = new geoxan(&window);
     //hack to update before first state
-    game->deltams = game->frametimer.restart().asMilliseconds();
+    game->deltams = game->frametimer.restart().asMicroseconds() / 1000;
     game->gamems = game->gametimer.getElapsedTime().asMicroseconds() / 1000;
-    game->changestate(new TitleState);
+
+
+    game->changestate(new GameState);
 
 
     
@@ -47,7 +50,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            game->state->event(event);
+            game->event(event);
 
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed)

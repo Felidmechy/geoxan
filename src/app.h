@@ -11,6 +11,18 @@ struct Settings
 
 class IBaseState;
 
+enum msglvls
+{
+    LVL_CRITICAL = 0,
+    LVL_ERROR,
+    LVL_WARN,
+    LVL_DBG,
+    LVL_INFO,
+    LVL_NONE
+};
+
+void msg(msglvls lvl, const char* msg);
+
 class geoxan
 {
 public:
@@ -21,11 +33,13 @@ public:
     IBaseState* state;
     sf::Clock gametimer;
     sf::Clock frametimer;
-    int deltams;
-    long gamems;
+    sf::Font dbgfont;
+    float deltams;
+    double gamems;
 
     static void readsettingsfile(Settings &settings);
 
     void changestate(IBaseState* newstate);
     void update();
+    void event(sf::Event &event);
 };

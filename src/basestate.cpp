@@ -15,12 +15,12 @@ void IBaseState::setup(IBaseState* prevstate, geoxan* game, sf::RenderWindow* wi
     this->game = game;
 }
 
-void IBaseState::draw(int deltams)
+void IBaseState::draw(float deltams)
 {
 
 }
 
-void IBaseState::update(int deltams)
+void IBaseState::update(float deltams)
 {
 
 }

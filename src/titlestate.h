@@ -1,6 +1,20 @@
 #include "basestate.h"
 #include "raudio/raudio.h"
 
+class Arrow : public sf::Drawable, public sf::Transformable
+{
+public:
+
+    // add functions to play with the entity's geometry / colors / texturing...
+    sf::VertexArray m_vertices;
+
+private:
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+    
+};
+
 class Button : public sf::Text
 {
     bool hoveredprev;
@@ -24,6 +38,7 @@ public:
 
     sf::CircleShape hexagon;
     sf::VertexArray rays;
+    Arrow arrow;
 
     bool shouldbounce;
     bool swapcolors;
@@ -38,8 +53,8 @@ public:
     void updatebuttons();
 
     virtual void setup(IBaseState *prevstate, geoxan *game, sf::RenderWindow *window);
-    virtual void draw(int deltams);
-    virtual void update(int deltams);
+    virtual void draw(float deltams);
+    virtual void update(float deltams);
     virtual void release(IBaseState *nextstate);
 
     virtual void event(sf::Event &event);

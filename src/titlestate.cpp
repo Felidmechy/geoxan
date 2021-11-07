@@ -4,6 +4,17 @@
 #include "raymath/raymath.h"
 #include <string>
 
+void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    // apply the entity's transform -- combine it with the one that was passed by the caller
+    states.transform *= getTransform(); // getTransform() is defined by sf::Transformable
+
+    // you may also override states.shader or states.blendMode if you want
+
+    // draw the vertex array
+    target.draw(m_vertices, states);
+}
+
 TitleState::TitleState() : IBaseState("TitleState")
 {
 
@@ -36,9 +47,23 @@ void TitleState::setup(IBaseState* prevstate, geoxan* game, sf::RenderWindow* wi
     hexagon.setPointCount(6);
     hexagon.setRadius(100);
     hexagon.setOrigin(hexagon.getRadius(), hexagon.getRadius());
-    hexagon.setPosition(window->getView().getCenter().x, window->getView().getSize().y);
+    hexagon.setPosition(window->getView().getCenter());
     hexagon.setOutlineColor(sf::Color::White);
     hexagon.setOutlineThickness(8);
+
+
+
+    arrow.m_vertices.resize(8);
+    arrow.m_vertices.setPrimitiveType(sf::PrimitiveType::Quads);
+    arrow.m_vertices[0] = sf::Vertex({0,0});
+    arrow.m_vertices[1] = sf::Vertex({-20,0});
+    arrow.m_vertices[2] = sf::Vertex({-20,5});
+    arrow.m_vertices[3] = sf::Vertex({0,5});
+    arrow.m_vertices[4] = sf::Vertex({0,5});
+    arrow.m_vertices[5] = sf::Vertex({0,20});
+    arrow.m_vertices[6] = sf::Vertex({-5,20});
+    arrow.m_vertices[7] = sf::Vertex({-5,5});
+    arrow.setOrigin({-10,10});
 
     rays.resize(4 * hexagon.getPointCount());
     rays.setPrimitiveType(sf::PrimitiveType::Quads);
@@ -231,25 +256,28 @@ void TitleState::drawbg()
         normal.x = nextpoint.x - hexagon.getPosition().x;
         normal.y = nextpoint.y - hexagon.getPosition().y;
         normal = Vector2Normalize(normal);
-        normal = Vector2Scale(normal, 5000);
+        normal = Vector2Scale(normal, 1500);
 
-        rays[vert+2].position.x = normal.x;
-        rays[vert+2].position.y = normal.y;
+        rays[vert+2].position.x = normal.x + hexagon.getPosition().x;
+        rays[vert+2].position.y = normal.y + hexagon.getPosition().y;
 
         normal.x = curpoint.x - hexagon.getPosition().x;
         normal.y = curpoint.y - hexagon.getPosition().y;
         normal = Vector2Normalize(normal);
-        normal = Vector2Scale(normal, 5000);
+        normal = Vector2Scale(normal, 1500);
 
-        rays[vert+3].position.x = normal.x;
-        rays[vert+3].position.y = normal.y;
+        rays[vert+3].position.x = normal.x + hexagon.getPosition().x;
+        rays[vert+3].position.y = normal.y + hexagon.getPosition().y;
 
     }
-    
+
+    arrow.setPosition(hexagon.getTransform().transformPoint(hexagon.getPoint(0) + sf::Vector2f(0,-50)));
+    arrow.setRotation(hexagon.getRotation() - 45);
     
 
     window->draw(rays);
     window->draw(hexagon);
+    window->draw(arrow);
 }
 
 void updatebuttons()
@@ -257,7 +285,7 @@ void updatebuttons()
 
 }
 
-void TitleState::draw(int deltams)
+void TitleState::draw(float deltams)
 {
     drawbg();
     drawbuttons();
@@ -265,7 +293,7 @@ void TitleState::draw(int deltams)
     drawdbg();
 }
 
-void TitleState::update(int deltams)
+void TitleState::update(float deltams)
 {
     /*
     if (starttext.getGlobalBounds().contains(sf::Mouse::getPosition().x,sf::Mouse::getPosition().y))
